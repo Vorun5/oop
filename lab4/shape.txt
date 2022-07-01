@@ -1,0 +1,35 @@
+circle 1 1 10 35C510 BA49B6
+triangle -10 -10 0 0 10 -5 D04A00 86EF07
+rectangle 2.25 -5.75 10 20 99CDDE 4DCABC
+linesegment 0 0 10 10 5A0748
+
+
+	/*
+	if (to.x < from.x && to.y < from.y)
+	{	
+		CPoint buf = to;
+		to = from;
+		from = to;	
+	}
+	double c = CPoint::GetDistanceBetweenTwoPoints(from, to);
+	std::cout << "hypotenuse: " << c << std::endl;
+	double a = CPoint::GetDistanceBetweenTwoPoints(from, CPoint(to.y, from.x));
+	std::cout << "side a: " << a << std::endl;
+	double t = a / c;
+	
+	if (t < -1)
+	{
+		t = -1;
+	}
+	else if (t > 1)
+	{
+		t = 1;
+	}
+	double angle = (acos(t) * 180) / M_PI;
+	std::cout << "angle: " << angle << std::endl;
+	RGB rgbLC = UInt32_tToRGB(lineColor);
+	auto line = std::make_unique<sf::RectangleShape>(sf::Vector2f(c, outlineSize));
+	line->setFillColor(sf::Color(rgbLC.r, rgbLC.g, rgbLC.b));
+	line->rotate(angle);
+	m_shapes.push_back(std::move(line)); 
+	*/
