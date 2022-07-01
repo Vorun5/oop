@@ -1,0 +1,2 @@
+Invalid arguments count
+Usage: findtext.exe <input file name> <text to search>

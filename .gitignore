@@ -5,6 +5,8 @@
 *.suo
 *.user
 **/Debug
+*.vcxproj
+*.vcxproj.filters
 **/.vs
 *.userosscache
 *.sln.docstates
