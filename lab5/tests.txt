@@ -1,0 +1,207 @@
+#define CATCH_CONFIG_MAIN
+#include <iostream>
+#include <fstream>
+
+#include "../../cath/catch.hpp"
+#include "../rational/CRational.h"
+#include <corecrt_math_defines.h>
+
+using namespace std;
+
+SCENARIO("The rational number must be created valid its methods must work correctly")
+{
+
+	GIVEN("The constructor without value should create numerator = 0 and denominator = 1")
+	{
+		REQUIRE(2 == 2);
+
+		CRational rational;
+		REQUIRE(rational.GetDenominator() == 1);
+		REQUIRE(rational.GetNumerator() == 0);
+		REQUIRE(rational.ToDouble() == 0);
+		REQUIRE(CRational::GetGreatestCommonDivisor(0, 1) == 1);
+	}
+
+	GIVEN("The constructor with one value should create numerator = value and denominator = 1")
+	{
+		CRational rational(41);
+		REQUIRE(rational.GetDenominator() == 1);
+		REQUIRE(rational.GetNumerator() == 41);
+		REQUIRE(rational.ToDouble() == 41);
+		REQUIRE(rational.GetGreatestCommonDivisor(41, 1) == 1);
+	}
+
+	GIVEN("The constructor with two value should create numerator = numerator and denominator = denominator")
+	{
+		CRational rational(42, 20);
+		REQUIRE(rational.GetDenominator() == 10);
+		REQUIRE(rational.GetNumerator() == 21);
+		REQUIRE(rational.ToDouble() == 21 / 10);
+		REQUIRE(rational.GetGreatestCommonDivisor(21, 10) == 1);
+	}
+
+	GIVEN("If the denominator is 0 then it must create a rational number with denominator = 1 and numerator = 0")
+	{
+		CRational rational(241, 0);
+		REQUIRE(rational.GetDenominator() == 1);
+		REQUIRE(rational.GetNumerator() == 0);
+		REQUIRE(rational.ToDouble() == 0);
+		REQUIRE(rational.GetGreatestCommonDivisor(0, 1) == 1);
+	}
+
+	GIVEN("The rational number must be normalized when creating")
+	{
+		CRational rational(6, 8);
+		REQUIRE(rational.GetDenominator() == 4);
+		REQUIRE(rational.GetNumerator() == 3);
+		REQUIRE(rational.ToDouble() == 3 / 4);
+		REQUIRE(rational.GetGreatestCommonDivisor(3, 4) == 1);
+
+		CRational rational2(8, -6);
+		REQUIRE(rational2.GetDenominator() == 3);
+		REQUIRE(rational2.GetNumerator() == -4);
+		REQUIRE(rational2.ToDouble() == -4 / 3);
+		REQUIRE(rational2.GetGreatestCommonDivisor(-4, 3) == 1);
+	}
+}
+
+SCENARIO("Calculation operators for  rational number operators must work correctly")
+{
+
+	GIVEN("Unary minus")
+	{
+		CRational rational(6, 8);
+		rational = -rational;
+		REQUIRE(rational.GetDenominator() == 4);
+		REQUIRE(rational.GetNumerator() == -3);
+		REQUIRE(rational.ToDouble() == -3 / 4);
+		REQUIRE(rational.GetGreatestCommonDivisor(-3, 4) == 1);
+
+		CRational rational2(8, -6);
+		rational2 = -rational2;
+		REQUIRE(rational2.GetDenominator() == 3);
+		REQUIRE(rational2.GetNumerator() == 4);
+		REQUIRE(rational2.ToDouble() == 4 / 3);
+		REQUIRE(rational2.GetGreatestCommonDivisor(4, 3) == 1);
+	}
+
+	GIVEN("Unary plus")
+	{
+		CRational rational(1, 8);
+		rational = +rational;
+		REQUIRE(rational.GetDenominator() == 8);
+		REQUIRE(rational.GetNumerator() == 1);
+		REQUIRE(rational.ToDouble() == 1 / 8);
+		REQUIRE(rational.GetGreatestCommonDivisor(1, 8) == 1);
+	}
+
+	GIVEN("Addition operator")
+	{
+		CRational rational(1, 2);
+		rational += CRational(1, 6);
+		REQUIRE(rational.GetNumerator() == 2);
+		REQUIRE(rational.GetDenominator() == 3);
+		REQUIRE(rational.ToDouble() == 2 / 3);
+		REQUIRE(rational.GetGreatestCommonDivisor(2, 3) == 1);
+
+		CRational rational2;
+		rational2 = CRational(1, 2) + 2;
+		REQUIRE(rational2.GetNumerator() == 5);
+		REQUIRE(rational2.GetDenominator() == 2);
+		REQUIRE(rational2.ToDouble() == 5 / 2);
+		REQUIRE(rational2.GetGreatestCommonDivisor(5, 2) == 1);
+	}
+
+	GIVEN("Subtraction operator")
+	{
+		CRational rational(1, 2);
+		rational -= CRational(1, 6);
+		REQUIRE(rational.GetDenominator() == 3);
+		REQUIRE(rational.GetNumerator() == 1);
+		REQUIRE(rational.ToDouble() == 1 / 3);
+		REQUIRE(rational.GetGreatestCommonDivisor(1, 3) == 1);
+
+		CRational rational2;
+		rational2 = CRational(1, 2) - 1;
+		REQUIRE(rational2.GetNumerator() == -1);
+		REQUIRE(rational2.GetDenominator() == 2);
+		REQUIRE(rational2.ToDouble() == -1 / 2);
+		REQUIRE(rational2.GetGreatestCommonDivisor(-1, 2) == 1);
+	}
+
+	GIVEN("Division operator")
+	{
+		CRational rational(1, 2);
+		rational /= CRational(2, 3);
+		REQUIRE(rational.GetNumerator() == 3);
+		REQUIRE(rational.GetDenominator() == 4);
+		REQUIRE(rational.ToDouble() == 3 / 4);
+		REQUIRE(rational.GetGreatestCommonDivisor(3, 4) == 1);
+
+		CRational rational2;
+		rational2 = CRational(1, 2) / 5;
+		REQUIRE(rational2.GetNumerator() == 1);
+		REQUIRE(rational2.GetDenominator() == 10);
+		REQUIRE(rational2.ToDouble() == 1 / 10);
+		REQUIRE(rational2.GetGreatestCommonDivisor(1, 10) == 1);
+	}
+
+	GIVEN("Multiplication operator")
+	{
+		CRational rational(1, 2);
+		rational *= CRational(2, 3);
+		REQUIRE(rational.GetNumerator() == 1);
+		REQUIRE(rational.GetDenominator() == 3);
+		REQUIRE(rational.ToDouble() == 1 / 4);
+		REQUIRE(rational.GetGreatestCommonDivisor(1, 4) == 1);
+
+		CRational rational2;
+		rational2 = CRational(1, 2) / 3;
+		REQUIRE(rational2.GetNumerator() == 1);
+		REQUIRE(rational2.GetDenominator() == 6);
+		REQUIRE(rational2.ToDouble() == 1 / 6);
+		REQUIRE(rational2.GetGreatestCommonDivisor(1, 6) == 1);
+	}
+}
+
+SCENARIO("Operators comparing rational numbers must work correctly")
+{
+
+	GIVEN("Equality and Non-Equality Operators")
+	{
+		REQUIRE(CRational(1, 2) == CRational(1, 2));
+		REQUIRE(!(CRational(1, 2) == 7));
+		REQUIRE(CRational(4, 2) == 2);
+		REQUIRE(CRational(4, 2) != 3);
+		REQUIRE(CRational(-7, 2) == CRational(-7, 2));
+		REQUIRE(!(CRational(-5, 2) == CRational(-7, 2)));
+		REQUIRE(CRational(-7, 2) != CRational(1, 2));
+		REQUIRE(!(CRational(1, 2) != CRational(1, 2)));
+	}
+
+	GIVEN("Comparison operators")
+	{
+		REQUIRE(CRational(4, 2) >= 2);
+		REQUIRE(CRational(1, 2) >= CRational(1, 3));
+		REQUIRE(!(CRational(1, 2) <= CRational(1, 3)));
+		REQUIRE(CRational(3, 1) > 2);
+		REQUIRE(!(CRational(3, 1) > 5));
+		REQUIRE(!(CRational(1, 2) < CRational(1, 3)));
+		REQUIRE(CRational(1, 2) < 7);
+		REQUIRE(3 <= CRational(7, 2));
+		REQUIRE(!(3 >= CRational(8, 2)));
+	}
+}
+
+SCENARIO("Stream input and output operators must correctly read and output rational numbers") {
+
+	GIVEN("Stream reading") {
+		std::stringstream stream("-1/10 kat");
+		CRational rational;
+		REQUIRE(stream >> rational);
+		REQUIRE(rational.GetNumerator() == -1);
+		REQUIRE(rational.GetDenominator() == 10);
+		REQUIRE(rational.ToDouble() == -1 / 10);
+		REQUIRE(rational.GetGreatestCommonDivisor(-1, 10) == 1);
+	}
+}

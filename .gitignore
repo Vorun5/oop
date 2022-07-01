@@ -5,6 +5,7 @@
 *.suo
 *.user
 **/Debug
+**/sfml
 *.vcxproj
 *.vcxproj.filters
 **/.vs
